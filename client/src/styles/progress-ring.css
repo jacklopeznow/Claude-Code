@@ -1,0 +1,82 @@
+/**
+ * ProgressRing Styles
+ * Animated circular progress indicator
+ */
+
+.progress-ring-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-ring {
+  width: 100%;
+  height: 100%;
+}
+
+.progress-ring-bg {
+  transition: stroke var(--transition-base);
+}
+
+.progress-ring-fill {
+  transition: stroke-dashoffset var(--transition-slow) ease-out;
+  stroke: var(--color-accent-teal);
+}
+
+.progress-ring-fill.animated {
+  animation: fillRing var(--transition-slow) ease-out forwards;
+}
+
+@keyframes fillRing {
+  from {
+    stroke-dashoffset: 100%;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Center label positioning */
+.progress-ring-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+}
+
+.progress-ring-percentage {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.progress-ring-text {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Responsive sizing for different SVG sizes */
+@media (max-width: 768px) {
+  .progress-ring-label {
+    gap: var(--spacing-xs);
+  }
+
+  .progress-ring-percentage {
+    font-size: var(--font-size-base);
+  }
+
+  .progress-ring-text {
+    font-size: 10px;
+  }
+}

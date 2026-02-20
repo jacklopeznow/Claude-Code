@@ -1,0 +1,155 @@
+WORKFLOW 8: POST-INCIDENT REVIEW & LEARNING
+Focus: PIR/retrospective process, knowledge capture, and process improvement feedback loops.
+This workflow closes the loop on operational excellence.
+
+PURPOSE & SCOPE
+An incident is not complete until the organization has learned from it. A retrospective review
+surfaces systemic weaknesses, gaps in monitoring, process failures, and training needs. Without
+this feedback loop, the organization is doomed to repeat the same incidents. Your task is to
+understand the client's retrospective process, how findings are tracked and actioned, and how
+learnings are fed back into ITOM configuration (alert thresholds, runbooks, knowledge base,
+monitoring coverage).
+
+KEY ITOM DEPENDENCIES
+• Incident Data Quality: Post-incident analysis depends on complete, accurate incident records
+  (timeline, diagnostic steps, fix applied, verification). If incident work logs are sparse,
+  PIR analysis is weakened.
+• Knowledge Management Integration: PIRs should result in updated runbooks, KB articles, and
+  alert rules. Without integration, findings sit in a PDF that no one reads.
+• Trend Analysis: The ability to spot patterns (e.g., "we've had 3 similar incidents in the
+  past month") requires incident search/reporting. If incident data is siloed or inconsistent,
+  trends are invisible.
+• Alert Rule Tuning: Many incidents result in "we need a better alert" or "that alert is too
+  noisy." Findings must be fed back to observability tool teams or ServiceNow event rules.
+• Process Governance: PIR findings lead to process improvements (e.g., "we need on-call
+  rotation," "we need escalation criteria"). Who owns process change? Who tracks implementation?
+
+COMMON GAPS TO PROBE
+• "We don't do formal retrospectives; senior staff might grab coffee and discuss briefly."
+  (RED FLAG: no formal process, findings are not documented or tracked, learning is tribal)
+• "PIRs are conducted, but reports sit in a shared drive; no one looks at them again." (RED FLAG:
+  findings are not actioned; knowledge is not leveraged for process/tool improvements)
+• "We track PIR action items, but there's no accountability; some are still open 6 months later."
+  (AMBER FLAG: action item process is broken; ask: "Who tracks action items? Who is accountable?
+  What's the average closure time?")
+• "We don't have a formal incident categorization; PIR findings are hard to correlate because
+  incidents are described inconsistently." (RED FLAG: inconsistency makes trend analysis
+  impossible; recommend incident taxonomy)
+• "PIRs often result in 'we need better communication' or 'we need more training,' but these
+  are never addressed." (RED FLAG: soft findings are dismissed; ask: "What would it take to make
+  communication better? Is it a tool gap or a process gap?")
+• "We don't feed PIR findings back into alert configuration or runbook updates." (AMBER FLAG:
+  learning loop is incomplete; ask: "When was the last time an alert was created based on a PIR
+  finding?" If >6 months, flag as RED)
+• "Different teams have different retrospective practices; there's no consistency." (AMBER FLAG:
+  ask what the variation is and whether it reflects different incident types or just lack of
+  governance)
+
+FIELD-BY-FIELD GUIDANCE
+
+When documenting retrospective cadence:
+Ask: "After an incident, when do you hold a retrospective? What's the criteria for holding one?"
+If the answer is "only for major incidents," ask: "How do you define major?" If criteria are
+vague, flag as AMBER. If retrospectives are held only occasionally or informally, flag as RED.
+Request data: "In the past 6 months, how many incidents occurred and how many retrospectives
+were held?" If ratio is <1:10, flag as RED.
+
+When documenting retrospective attendance & facilitation:
+Ask: "Who attends the retrospective? Is there a facilitator?" If attendance is optional or
+varies widely, flag as AMBER. If there is no facilitation, ask: "Does the conversation stay
+focused? Is action-oriented?" If the answer is vague, flag as AMBER and recommend a
+professional facilitator. If the same senior person facilitates all retrospectives, ask: "What
+happens if that person is not available?" Single point of knowledge failure = AMBER.
+
+When documenting PIR documentation:
+Ask: "Is the retrospective documented? Where? Is it searchable and discoverable?" If PIR
+reports are created but not shared or made discoverable, flag as RED. If PIR reports are in a
+central location, ask: "How often are they referenced?" If answer is "rarely," flag as AMBER
+and ask why — is it too verbose? Hard to search? Not relevant to daily work?
+
+When documenting action item tracking:
+Ask: "When PIR produces an action item, how is it tracked? Who is accountable? What's the
+timeline?" If action items are not tracked in a tool (e.g., ServiceNow, Jira), flag as AMBER.
+If they are tracked but have high overdue rates (>20% of items older than their due date), flag
+as RED and recommend ownership and escalation procedure.
+
+When documenting finding categories:
+Ask: "What types of findings typically come out of PIRs?" Listen for: gaps in monitoring,
+process improvements, training needs, tool changes, automation opportunities, etc. If the
+organization struggles to articulate finding categories, flag as AMBER and recommend PIR template
+with standard finding types (Technical, Process, Knowledge, Tooling, Escalation).
+
+When documenting process improvements from PIR findings:
+Ask: "Can you give me an example of a PIR finding that led to a concrete process change?"
+Request a specific example. If the organization struggles to provide one or the example is vague,
+flag as RED: findings are not being actioned. If they provide a good example, note it — this
+indicates a healthy feedback loop.
+
+When documenting alert/threshold improvements from PIR findings:
+Ask: "Have any new alerts or threshold changes been made based on PIR findings? Can you give
+examples?" If the answer is "not really" or "I can't think of any," flag as AMBER and explain
+that PIR findings should inform observability tool configuration. If examples exist, note them
+and ask: "How often does this happen? Is there a formal process?" If formal process exists,
+mark as GREEN.
+
+When documenting runbook/knowledge updates:
+Ask: "When a PIR identifies a gap in runbooks or knowledge, what happens? Is a runbook updated?
+Is a KB article created?" If the answer is "not consistently" or "someone should but I'm not sure
+if they do," flag as AMBER and recommend process ownership. If updates are systematic, ask:
+"Who owns keeping runbooks current? What's the review cycle?"
+
+When documenting incident classification & taxonomy:
+Ask: "How do you categorize incidents? Is there a standard taxonomy?" If the answer is "no,
+people just fill in whatever they want," flag as RED and recommend consistent categorization
+(incident type, affected component, root cause category). Consistent categorization is essential
+for trend analysis and finding patterns.
+
+When documenting trend analysis capability:
+Ask: "Can you run a report on incidents from the past quarter? Can you see which systems have
+the most issues? Which issue types are most common? Which teams are most loaded?" If the
+organization cannot answer these questions or cannot generate reports, flag as AMBER: incident
+data is not being leveraged strategically.
+
+PROBING QUESTIONS TO TRIGGER DEPTH
+
+• "Walk me through a recent major incident and its retrospective. What were the key findings?
+  What actions were assigned? Are those actions complete?"
+• "Can you give me an example of a change you made to your monitoring, runbooks, or processes
+  based on a PIR finding? When was that? What prompted it?"
+• "Have you had two similar incidents in a row (same system, same issue)? If so, why didn't the
+  PIR from the first one prevent the second?"
+• "What's your biggest complaint about your retrospective process right now?"
+• "If I asked you to find all incidents caused by a specific root cause (e.g., 'process timeout')
+  in the past 6 months, could you run that query? How long would it take?"
+
+EXPECTED OUTPUTS FOR DOWNSTREAM WORKFLOWS
+
+This workflow must document:
+• Retrospective cadence and criteria for holding PIRs
+• PIR attendance, facilitation, and documentation practices
+• Action item tracking and closure rate
+• Incident classification taxonomy
+• Finding categories and trend analysis capability
+• Examples of process improvements from PIR findings
+• Examples of tool/alert improvements from PIR findings
+• Examples of runbook/knowledge updates from PIR findings
+• Historical trend data (top incident types, top affected systems, systemic gaps)
+
+Critical learning loop gaps cause:
+• Repeated incidents for the same root cause, indicating learning is not being applied
+• Process improvements stall because action items are not tracked or owned
+• Observability tool and runbook gaps accumulate over time, increasing MTTR
+• Systemic weaknesses (e.g., understaffing, skill gaps) go unaddressed
+• Lost institutional knowledge when senior staff leave and no documentation exists
+
+The post-incident review workflow closes the loop on ITOM maturity. Organizations that excel
+here have:
+• Low incident recurrence rates (same issue not happening twice in a quarter)
+• High action item closure rates (>80% on time)
+• Clear trend visibility and proactive response to systemic issues
+• Well-maintained runbooks and knowledge bases that are actively used
+• Strong culture of learning and continuous improvement
+
+Investment here pays long-term dividends. Quick wins: standardize incident classification,
+implement action item tracking in ServiceNow, automate incident trend reporting, and establish
+PIR cadence SLAs.

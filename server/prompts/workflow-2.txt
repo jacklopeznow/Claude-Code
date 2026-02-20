@@ -1,0 +1,103 @@
+WORKFLOW 2: TRIAGE & CLASSIFICATION
+Focus: How incoming events/alerts are assessed for severity, categorized, and prioritized.
+This is where operational judgment turns raw signals into actionable intelligence.
+
+PURPOSE & SCOPE
+Triage is the first human decision point in the incident lifecycle. A well-triaged event is
+correctly classified by severity, category, and urgency, and is ready for intelligent routing.
+A poorly triaged event wastes resources chasing false positives or misses critical issues.
+Your task is to understand how the client's team currently makes these decisions and what
+rules (explicit or implicit) guide them.
+
+KEY ITOM DEPENDENCIES
+• Event Rules in ServiceNow: Do explicit rules map incoming events to incident categories,
+  severity levels, and assignment groups? Or is triage manual?
+• CI-Based Routing: Does ServiceNow know which CI an event belongs to? Does the CI record
+  identify an owner or assignment group? If not, triage routing defaults to tribal knowledge.
+• Severity Matrices: Does the organization have a documented matrix (e.g., "Database down =
+  Critical, Disk 90% = Major")? Or are triage operators making gut calls?
+• SLA Definitions: Are triage decisions tied to documented SLAs? Or does "P1" mean different
+  things to different teams?
+
+COMMON GAPS TO PROBE
+• "We triage everything manually — a person reads the alert and decides." (RED FLAG: not
+  scalable, prone to error, no consistent criteria)
+• "Severity is based on whoever is on-call's judgment." (RED FLAG: inconsistency, ad-hoc
+  escalation, no accountability)
+• "We don't have a formal category list; we use whatever the alert says." (AMBER FLAG:
+  inconsistent categorization, hard to trend or route)
+• "Triage happens over Slack or email; we then create a ticket." (RED FLAG: context loss,
+  delay, no audit trail)
+• "We assign based on the CI owner, but we don't trust the CMDB." (DEPENDENCY GAP: RED:
+  CMDB ownership data must be validated before routing can be automated)
+• "We have a severity matrix, but triage operators don't follow it consistently." (AMBER FLAG:
+  training or enforcement gap; ask for recent example of mis-triaged event)
+
+FIELD-BY-FIELD GUIDANCE
+
+When documenting current severity classification:
+Ask how triage operators assign severity levels (P1, P2, P3, or Critical/High/Medium/Low).
+Request the organization's official severity matrix. If none exists, flag as RED. If it exists
+but operators don't follow it, probe for the reason: unclear definitions? Too many edge cases?
+Peer pressure to inflate severity? Document the actual practice, not the policy.
+
+When documenting category/type assignment:
+Ask: "What categories do you use? How does a category get assigned?" If the answer is "the
+monitoring tool pre-fills it" or "the alert type matches one of our categories," probe deeper:
+"Do all incoming alerts map cleanly to your categories, or do you have a long tail of 'Other'?"
+Flag systematic misalignment as AMBER.
+
+When documenting urgency/priority logic:
+Distinguish between impact (How many users? How many systems?) and urgency (How fast is it
+degrading?). Ask for examples: "A storage array controller fails over to redundancy. Is that
+Critical because it happened, or is it High because users are unaffected?" If the answer is
+inconsistent or vague, flag as AMBER and probe further.
+
+When documenting triage assignment routing:
+Ask: "Once you've triaged an event as Critical, how do you decide which team handles it?"
+If the answer relies on CI ownership, ask how often the CMDB ownership field is correct.
+If the answer is "we know the team based on the alert type," flag as AMBER: this breaks when
+a new CI or team joins the organization. If the answer is "whoever is on call," flag as AMBER:
+ensure the on-call schedule is integrated with ServiceNow assignment logic.
+
+When documenting false positive/noise handling:
+Ask: "What percentage of triaged events are later found to be false positives?" If operators
+answer "we don't track that," flag as RED and recommend change event correlation or alert
+tuning metrics. If false positive rate is >10%, flag as RED and recommend threshold review
+with observability team.
+
+When documenting escalation criteria:
+Ask: "When does a triage operator escalate an event to management or a war room?" If the
+answer is "when it looks really bad" or "when I'm unsure," flag as RED. Escalation must be
+tied to documented criteria (impact, duration, SLA breach risk).
+
+PROBING QUESTIONS TO TRIGGER DEPTH
+
+• "Walk me through the last Critical event your team triaged. What made you call it Critical?
+  Who decided the assignment? How long from alert to assignment?"
+• "Do you have any events that are frequently mis-triaged? What's an example?"
+• "If a monitoring tool sends an alert that doesn't cleanly fit your severity matrix, how does
+  the triage operator handle it?"
+• "Does your triage operator ever check recent change records or service dependency data to
+  inform severity? How?"
+• "What's your biggest complaint about the current triage process?"
+
+EXPECTED OUTPUTS FOR DOWNSTREAM WORKFLOWS
+
+This workflow must document:
+• Severity levels in use and their definitions (official and actual)
+• Category taxonomy and mapping rules (from alerts to incidents)
+• Urgency assessment criteria and edge cases
+• Routing logic from triage decision to assignment group or individual
+• False positive rate and noise handling procedures
+• Escalation criteria and authority levels
+• Frequency of triage errors and examples of misclassification
+• On-call and team ownership data accuracy assessment
+
+Critical gaps here will cause:
+• Misdirected incidents reaching the wrong team
+• SLA breaches due to incorrect severity assignment
+• Alert fatigue from unfiltered noise classified as high-severity
+• Inconsistent incident data making downstream trend analysis unreliable
+
+Strong triage sets the stage for efficient correlation and resolution. Invest time here.

@@ -1,0 +1,138 @@
+WORKFLOW 7: VERIFICATION & CLOSURE
+Focus: How resolution is confirmed, closure criteria, and post-fix monitoring. This workflow
+prevents premature closure and ensures infrastructure changes are durable.
+
+PURPOSE & SCOPE
+An incident is resolved when the responder declares it resolved. But is it really? Has the root
+cause been fixed or only the symptom masked? Will the problem recur when load spikes or when
+someone makes a similar mistake? Will the monitoring tool alert again on the same threshold
+now that the responder has made an infrastructure change? Your task is to understand the
+client's verification and closure procedures — both the formal policy and the reality of what
+actually happens.
+
+KEY ITOM DEPENDENCIES
+• Monitoring Tool Confirmation: Does the responder verify that alerts have stopped before
+  closing an incident? Or do they assume "the alert is gone, so it's fixed"?
+• CMDB Update Post-Resolution: When infrastructure changes (new server added, service migrated,
+  component replaced), is the CMDB updated? Or does it sit stale, causing future correlation
+  failures or false alerts?
+• Change Management Integration: Are configuration changes recorded as formal changes in
+  ServiceNow? Or are they ad-hoc updates that bypass governance?
+• Post-Fix Monitoring: Is there a verification/burn-in period where responders actively monitor
+  the fixed system before closure? Or is closure immediate?
+• Closure Criteria: What must be true before an incident can be closed? Is that policy
+  documented and followed?
+• Customer Confirmation (if applicable): For customer-impacting issues, is resolution confirmed
+  with the customer before closure?
+
+COMMON GAPS TO PROBE
+• "We close incidents as soon as the fix is deployed; we don't wait to confirm." (RED FLAG:
+  closure is premature; asks if monitoring is checked; if not, flag as RED)
+• "The CMDB is never updated after incidents; we update it as part of a separate batch process
+  once a quarter." (DEPENDENCY GAP: RED: stale CMDB will cause future correlation failures,
+  false alerts, and misdirected assignments)
+• "Configuration changes are applied directly to systems; they're not recorded in a change ticket."
+  (RED FLAG: audit trail is missing, change is not recorded in CMDB timeline, future audits
+  fail)
+• "We have closure criteria, but responders don't always follow them." (AMBER FLAG: ask for
+  examples of incidents closed without meeting criteria; probe for root cause)
+• "There's no post-fix monitoring; we assume if the alert is gone, it's fixed." (RED FLAG:
+  high risk of false closure and recurrence; recommend 30-min burn-in period minimum)
+• "We don't update infrastructure monitoring thresholds after incidents." (AMBER FLAG: ask:
+  "If a threshold was breached and caused an incident, did you tune the threshold to be more
+  realistic?" If not, same threshold may trigger same incident again)
+• "Customers have to tell us the service is working again; we don't independently verify."
+  (AMBER FLAG if SLA-critical service; flag as RED if closure is delayed waiting for customer
+  response)
+
+FIELD-BY-FIELD GUIDANCE
+
+When documenting closure verification process:
+Ask: "Walk me through how you verify that an incident is actually fixed. Do you check the
+monitoring tool? Run a test? Wait a period of time?" Document the actual steps. If the answer
+is "we don't, we just close it," flag as RED. If verification happens but is not documented
+or not consistently done, flag as AMBER and ask: "Who decides when to close?"
+
+When documenting post-fix monitoring:
+Ask: "After you fix an issue, do you actively monitor it for a period of time before closing?
+How long? What would make you re-open an incident?" If the answer is "no, we don't monitor,
+we just close," flag as RED. If there is a monitoring period, ask: "What's the shortest and
+longest period you've waited before closing?" If >1 week, ask why; long burn-in may indicate
+low confidence in fix. If <5 minutes, ask: "How often do you have to re-open incidents?" If
+>5%, flag as RED and recommend longer burn-in.
+
+When documenting CMDB update procedures:
+Ask: "When infrastructure changes as part of incident resolution (e.g., server is replaced),
+who updates the CMDB? When? Do you have a process, or is it ad-hoc?" If the answer is "we
+don't update the CMDB as part of incidents; Discovery picks it up later," flag as [DEPENDENCY
+GAP] AMBER and probe: "How long is 'later'? What's the risk if the same issue happens before
+Discovery runs?" If Discovery is weekly and incidents happen daily, stale CMDB risk is HIGH.
+
+When documenting change management integration:
+Ask: "When a configuration change is made to fix an incident, is it recorded in ServiceNow
+Change Management? Or is it just applied directly?" If applied directly without a change
+ticket, flag as RED: audit trail is broken, CMDB cannot be reliably updated, and future
+correlation may fail. If a change ticket is used, ask: "Is it created before or after the fix
+is applied?" Before = GREEN (change governance), after = AMBER (remedial documentation).
+
+When documenting closure criteria:
+Request the documented closure criteria. If none exist, flag as RED. If they exist, ask:
+"Do responders follow these consistently?" If the answer is "mostly" or "not always," ask
+for recent examples of premature or delayed closures. Note the reason.
+
+When documenting escalation back to customer:
+Ask: "For critical incidents affecting customers, who communicates resolution back to the
+customer? How do you confirm they can access the service?" If communication is manual and
+slow, flag as AMBER. If the customer has to report access before incident is closed, flag
+as AMBER and ask: "How often is closure delayed waiting for customer confirmation?" If >10%
+of incidents, flag as RED and recommend time-boxed closure (e.g., auto-close after 24 hours
+even if no customer response).
+
+When documenting threshold tuning post-incident:
+Ask: "When an incident happens because a threshold was breached, what happens to that
+threshold? Is it reviewed? Tuned?" If the answer is "we don't change thresholds," flag as
+AMBER and ask: "Have you had duplicate incidents for the same issue?" If yes, flag as RED
+and note the issue types.
+
+When documenting recurring/re-opened incidents:
+Ask: "Do you track how often incidents are re-opened after closure? What's the rate?" If not
+tracked, flag as AMBER and recommend tracking (high re-open rate indicates premature closure
+or incomplete root cause fix). Request recent examples of re-opened incidents.
+
+PROBING QUESTIONS TO TRIGGER DEPTH
+
+• "Walk me through a recent incident from diagnosis to closure. When did you decide it was
+  fixed? What convinced you? Did you monitor it after the fix before closing?"
+• "Have you had an incident that was closed and then re-opened the next day? What happened?
+  Why did you have to re-open it?"
+• "If you made a configuration change to fix an incident, when does the CMDB get updated to
+  reflect that change?"
+• "For an incident where the alert threshold was the root cause, what happens to that threshold?
+  Do you tune it?"
+• "What's your fastest closure time? What's your slowest? What's the difference between them?"
+
+EXPECTED OUTPUTS FOR DOWNSTREAM WORKFLOWS
+
+This workflow must document:
+• Closure verification procedures and consistency
+• Post-fix monitoring period and burn-in expectations
+• CMDB update procedures and timing
+• Change management integration (how fixes are recorded)
+• Documented closure criteria and adherence rate
+• Customer confirmation procedures (if applicable)
+• Threshold tuning procedures post-incident
+• Re-open rate and reasons for re-opens
+• Audit trail and compliance implications
+
+Critical verification and closure gaps cause:
+• Premature closure leading to recurrence and customer impact
+• Stale CMDB causing future incidents to be mis-routed or mis-correlated
+• Loss of audit trail for compliance (SOC 2, ISO 27001, etc.)
+• Missing threshold tuning causing repeated incidents
+• High re-open rate and customer dissatisfaction
+
+Closure discipline is often undervalued but is critical to overall operational maturity and
+ITOM platform reliability. Invest in automated verification where possible (monitoring tool
+confirmation, CMDB change tracking) and in procedural discipline (post-fix burn-in, threshold
+review). Quick wins: implement closure criteria checklist, automate CMDB updates from change
+tickets, and enable closure metrics dashboard.

@@ -1,0 +1,126 @@
+WORKFLOW 3: CORRELATION & CONTEXT ENRICHMENT
+Focus: How related events are grouped, how context (CI data, topology, recent changes) is
+gathered to provide operators with the big picture. This workflow separates root cause from
+symptom and reduces toil.
+
+PURPOSE & SCOPE
+In a healthy infrastructure, one root cause often triggers multiple alerts. A server network
+interface fails, triggering CPU alerts, memory alerts, application connectivity alerts, and
+database query timeouts — all in rapid succession. Without correlation, operators see 7 separate
+incidents. With correlation, they see 1. Context enrichment means adding to that correlated
+incident the information operators actually need: affected service topology, recent changes,
+CI details, and dependent services. Your task is to understand how (or whether) the client
+identifies relationships between events and enriches incidents with infrastructure context.
+
+KEY ITOM DEPENDENCIES
+• CMDB Relationships: Without accurate CI relationships (server hosts application hosts database),
+  correlation rules cannot infer that application alerts are symptoms of underlying database
+  health. This is non-negotiable. Stale or incomplete relationships are a leading cause of
+  correlation failure.
+• Discovery Accuracy & Currency: Discovery must regularly sync the CMDB to reflect real
+  infrastructure. A server that was decommissioned 6 months ago but still in CMDB will cause
+  false correlations. A new server not yet in CMDB will not be correlated. Operators need to
+  know Discovery schedule and last successful run.
+• Event Correlation Rules: ServiceNow must have rules that group events by affected CI,
+  topology, time window, and event type. Without them, correlation is manual and inconsistent.
+• Change Calendar Integration: Recent changes (maintenance windows, deployments, patches) are
+  the context that transforms "is this a problem?" into "is this expected?" Integration is rare
+  but extremely valuable.
+• Service Topology Data: Understanding which end-user services depend on which infrastructure
+  layers unlocks intelligent impact analysis and prioritization.
+
+COMMON GAPS TO PROBE
+• "We don't have correlation rules; we group related alerts manually." (RED FLAG: not scalable,
+  highly dependent on individual operator knowledge, inconsistent)
+• "Our CMDB relationships are incomplete or not trusted." (DEPENDENCY GAP: RED: correlation
+  will fail systematically. Must remediate CMDB before correlation goes live.)
+• "We don't know when Discovery runs or how often." (DEPENDENCY GAP: RED: Discovery currency
+  unknown; unable to assess CMDB staleness risk)
+• "We don't look at recent changes when triaging; that's a separate tool." (AMBER FLAG:
+  context enrichment opportunity missed; changes are primary root cause indicator)
+• "We don't have service dependency mapping; we rely on tribal knowledge." (RED FLAG: impact
+  analysis is tribal, escalation decisions are guesses, SLAs are unreliable)
+• "Correlation rules exist, but they're never tuned; we still see a lot of duplicate incidents."
+  (AMBER FLAG: rules are not fit-for-purpose; ask for tuning cadence and ownership)
+• "Incidents are enriched with CI data, but the CI names or types often don't match what the
+  operator sees in the monitoring tool." (DEPENDENCY GAP: AMBER: observability tool CI naming
+  must be reconciled with CMDB before enrichment is trustworthy)
+
+FIELD-BY-FIELD GUIDANCE
+
+When documenting correlation rule coverage:
+Ask: "What types of events do you correlate? Which types do you still handle manually?"
+If answer is "we correlate database alerts and application alerts, but not infrastructure,"
+flag as AMBER and probe further. Aim to understand the scope, not just coverage. Request
+examples of correlation rules in use (do not assume they are documented). If they are not
+documented, flag as RED.
+
+When documenting CMDB relationship health:
+Ask: "Do you trust the relationships in your CMDB? When was it last validated?" If the
+answer is "we don't know" or "we're not sure," flag as [DEPENDENCY GAP] RED. Probe for
+evidence: "Have you had a situation where correlation failed because a CI relationship was
+wrong?" If yes, flag as RED and note the example. If no, probe: "How many CIs are in your
+CMDB? How many of those have defined relationships to parent/child CIs?" <70% coverage =
+AMBER at minimum.
+
+When documenting Discovery schedule & health:
+Ask: "When does Discovery run? How often? Who monitors it? What's the failure rate?"
+If the answer is "I don't know," flag as [DEPENDENCY GAP] RED immediately and explain that
+stale CMDB is a leading cause of ITOM failure. If Discovery runs weekly or less frequently,
+ask if that cadence matches the rate of infrastructure change (new VMs, containers, network
+segments). Misalignment = AMBER.
+
+When documenting context enrichment practices:
+Ask: "What information does an operator have when they open a correlated incident? Do they
+see the affected CI, related services, recent changes, current resource utilization?" If the
+answer is "just the alert data," flag as AMBER: enrichment rules need to be implemented. If
+they see some context but it's inconsistent, probe: "When you look at an incident, do you
+have to manually search for related changes, or are they linked automatically?" Manual search
+= AMBER.
+
+When documenting service topology visibility:
+Ask: "Does your team have a map of which services depend on which infrastructure? Is it
+shared with ops?" If the answer is "no, we don't have that" or "the dev team has it, but
+ops doesn't," flag as RED and note this as a critical gap for impact analysis. If a map
+exists, ask: "How often is it updated? Who maintains it? Is it in a tool ops can query or
+is it a Visio diagram?" Tool-based = AMBER (better than nothing), Visio = RED (not operationally
+useful at incident time).
+
+When documenting false correlation/deduplication rates:
+Ask: "Do you ever see incidents that shouldn't have been correlated? Or events that should
+have been but weren't?" Request recent examples. If operators report >5% false correlations,
+flag as AMBER and recommend correlation rule tuning. If they don't track this metric, flag as
+AMBER and recommend enabling correlation audit/feedback loops.
+
+PROBING QUESTIONS TO TRIGGER DEPTH
+
+• "Walk me through a recent major incident. How many individual alerts fired? How many
+  incidents were created? How long did it take to realize they were related?"
+• "If your primary database server goes down, how many alerts fire in your system? Does
+  ServiceNow automatically group them into one incident?"
+• "Have you ever had a situation where a correlated incident pulled in an unrelated alert?
+  What was that like?"
+• "Who owns the correlation rules? When were they last reviewed or tuned?"
+• "If I told you a recent major change happened in the environment, how would that change
+  how you triage an incident?"
+
+EXPECTED OUTPUTS FOR DOWNSTREAM WORKFLOWS
+
+This workflow must document:
+• Inventory of correlation rules in place and their scope
+• CMDB relationship health assessment (coverage % and trust level)
+• Discovery schedule, health, and currency risk
+• Current context enrichment practices and gaps
+• Service topology visibility and maintenance responsibility
+• Change calendar integration status
+• False correlation rate and deduplication effectiveness
+• Manual vs. automated correlation split and pain points
+
+Critical correlation and enrichment gaps will cause:
+• Operator context switching and toil (searching for related info manually)
+• Longer MTTR due to missed or slow-to-surface root cause
+• Multiple duplicate incidents for single infrastructure event
+• Misdirected escalation based on incomplete impact understanding
+
+Correlation done well is force multiplication for ops teams. Invest heavily here in CMDB
+quality assessment and rule tuning.

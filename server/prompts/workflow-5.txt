@@ -1,0 +1,122 @@
+WORKFLOW 5: DIAGNOSIS & RESOLUTION
+Focus: How teams investigate root cause, isolate the problem, and apply fixes. This is where
+technical depth, situational awareness, and automation potential matter most.
+
+PURPOSE & SCOPE
+An assigned incident is a starting gun. The responder must now figure out what is actually
+broken, why it broke, and how to fix it. Diagnosis time is a primary driver of MTTR. Your task
+is to understand what tools, processes, and knowledge the client uses to diagnose issues and
+apply fixes — both what they have today and where automation could accelerate resolution.
+
+KEY ITOM DEPENDENCIES
+• CMDB Topology for Impact Analysis: When a system is broken, understanding which dependent
+  services are affected informs priority and workaround strategy. This requires accurate CMDB
+  relationships.
+• Runbook Automation: Do documented runbooks exist for common issues? Are they integrated into
+  ServiceNow so operators can trigger automated remediation? Or are runbooks external documents
+  that operators must interpret manually?
+• Knowledge Base: Is there a searchable repository of past incidents, solutions, and how-tos?
+  Can operators link an incident to similar past incidents?
+• Monitoring Dashboards & Drill-Down: Can responders quickly visualize infrastructure state,
+  alert history, and metric trends? Or do they have to log into multiple tools?
+• Change Management Integration: Can responders see what changed recently in the affected
+  infrastructure? Correlation with incidents is high.
+• Remediation Authority: Who can execute fixes? Are there approval gates that slow resolution?
+
+COMMON GAPS TO PROBE
+• "Diagnosis depends on the seniority of the responder. Senior staff can solve in 10 minutes;
+  junior staff might take an hour." (RED FLAG: tribal knowledge, no documented diagnosis
+  process, skill dependency, high MTTR variance)
+• "We have runbooks, but they're out of date and rarely used." (AMBER FLAG: runbooks must be
+  kept current; ask when they were last reviewed; if >6 months, flag as RED)
+• "Runbooks are in a wiki/Confluence; responders rarely know to look there." (AMBER FLAG:
+  runbooks must be integrated into incident workflow, not siloed in separate tool)
+• "We don't have automation for common remediation; everything is manual." (AMBER FLAG to RED:
+  assess which issues are frequent and which could be automated; create quick-win list)
+• "Responders have to log into 5+ different tools to diagnose an issue." (RED FLAG: context
+  switching and delay; single pane of glass would reduce MTTR)
+• "We don't have permission to restart services or change configurations; we have to request
+  access via a separate team." (AMBER FLAG: if approval gates are >5 minutes, they slow
+  resolution; ask if emergency bypass exists for Sev 1 incidents)
+• "We don't track what we tried and what worked; each responder starts from scratch." (RED FLAG:
+  knowledge is not captured; ask if incident work log is used; if not, recommend it)
+
+FIELD-BY-FIELD GUIDANCE
+
+When documenting diagnosis process:
+Ask: "When you get an incident, walk me through the first 5 minutes. What do you do? What
+tools do you use? What questions do you ask yourself?" Document the actual steps, not the ideal.
+If the first step is "log into the monitoring tool," note that. If the first step is "call the
+team lead," flag as AMBER: diagnosis process is not documented or accessible to responders.
+
+When documenting runbook coverage:
+Ask: "What issues do you have runbooks for? Are they documented anywhere? Are they
+automated?" Request a sample. If runbooks exist and are recent (< 6 months old), note
+coverage percentage. If coverage is <50% of common issues, flag as AMBER and recommend
+runbook development roadmap. If runbooks are not automated (i.e., operator must read and
+execute manually), ask if automation is planned.
+
+When documenting monitoring dashboard access:
+Ask: "Can you see resource utilization, alert history, and metric trends from ServiceNow, or
+do you have to log into your monitoring tool?" If multi-tool context switching is required, ask:
+"How long does it typically take to get from incident to 'I think I understand the problem'?"
+If answer is >10 minutes, flag as AMBER and recommend single pane of glass or ServiceNow
+dashboard integration.
+
+When documenting knowledge capture:
+Ask: "When you resolve an incident, do you document what you learned? Do you link similar past
+incidents to the current one?" If the answer is "not systematically" or "it's optional," flag
+as AMBER. If the answer is "we don't do that," flag as RED. Knowledge base linking is a
+high-ROI improvement area.
+
+When documenting remediation authority and approval gates:
+Ask: "If you diagnose that a service needs to be restarted, who can do that? How long does
+approval take?" If approval is automatic for Sev 1 or if responders have direct remediation
+authority, note as GREEN. If approval requires a ticket or manager sign-off, flag as AMBER
+and ask: "How long is the typical approval cycle?" >5 minutes for Sev 1 = RED.
+
+When documenting automation potential:
+Ask: "Which issues do you resolve frequently (e.g., daily or weekly)? Which of those are
+handled the same way each time?" Flag those as HIGH-ROI automation candidates. Ask: "How much
+time would your team save if that issue were fully automated?" Use the estimate to build an
+automation business case.
+
+When documenting escalation to external teams/vendors:
+Ask: "Which issues require escalation to vendors (cloud providers, SaaS vendors, hardware
+vendors)? How long does that typically take? Is there an SLA?" If vendor escalation is
+frequent and slow, flag as AMBER and recommend escalation readiness review.
+
+PROBING QUESTIONS TO TRIGGER DEPTH
+
+• "Walk me through a recent critical incident. Take me through diagnosis: what tools did you
+  use? How long did diagnosis take? What made it fast or slow?"
+• "Have you had a situation where you tried multiple fixes before finding the right one? What
+  was that?"
+• "If your most junior operator got assigned an incident, what would they do first? Would they
+  reach the same diagnosis as a senior operator?"
+• "What's your fastest resolution ever? What's your slowest? What was the difference?"
+• "Are there any issues where you know a fix will work but you can't auto-execute it? Why not?"
+
+EXPECTED OUTPUTS FOR DOWNSTREAM WORKFLOWS
+
+This workflow must document:
+• Diagnosis process steps and tools used
+• Runbook inventory, coverage, and automation status
+• Knowledge base adoption and integration
+• Monitoring dashboard/single pane of glass status
+• Remediation authority and approval gate cycles
+• High-frequency issues and automation candidates
+• MTTR baseline by severity and by issue type
+• Escalation paths to external teams/vendors
+• Responder skill matrix and variance in resolution time
+
+Critical gaps here cause:
+• Long MTTR due to tribal knowledge, context switching, or approval delays
+• Repeated mistakes as learnings from past incidents are not captured
+• High variance in MTTR across responders
+• Burnout due to repeated manual work that could be automated
+• Responder frustration and staff turnover
+
+Diagnosis and resolution excellence is where ITOM tools unlock business value. Invest in
+runbook development, automation, and knowledge management here. Quick wins in this area often
+deliver the highest ROI.

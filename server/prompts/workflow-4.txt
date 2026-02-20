@@ -1,0 +1,126 @@
+WORKFLOW 4: ASSIGNMENT & COORDINATION
+Focus: How incidents are routed to the right team/individual, how handoffs work, and how
+escalation authority is delegated. This workflow determines whether skilled people get the
+right problem at the right time or whether incidents bounce around like pinballs.
+
+PURPOSE & SCOPE
+Once an incident is triaged and correlated, it must reach the person or team best positioned
+to resolve it. Assignment decisions are constrained by skill, availability, on-call schedules,
+team geography, and escalation authority. Your task is to understand how assignment routing
+currently works — both the formal rules (if they exist) and the informal workarounds that
+make it happen in reality.
+
+KEY ITOM DEPENDENCIES
+• CMDB CI Ownership: Does each significant CI (server, application, database, network segment)
+  have a documented owner or owning team in the CMDB? Is that data current and trusted?
+  If not, assignment routing cannot be automated.
+• Assignment Group Configuration: Does ServiceNow have assignment groups that correspond to
+  the client's operational structure? Are assignment groups tied to specific skills or
+  technologies?
+• On-Call Schedule Integration: Are on-call schedules integrated with ServiceNow? Can assignment
+  rules automatically route to the person currently on-call for a given team?
+• Escalation Policies: Are escalation paths documented (Team A escalates to Team B escalates to
+  Team C)? Are escalation criteria tied to time, severity, or specific conditions?
+• Team Skills & Specialization: Which teams handle which technologies? Is there skill redundancy
+  or single points of knowledge failure?
+
+COMMON GAPS TO PROBE
+• "We assign incidents manually based on who we know." (RED FLAG: tribal knowledge, single
+  points of failure, inconsistent SLA adherence)
+• "Assignment groups exist in ServiceNow but don't match our actual team structure." (AMBER FLAG:
+  routing rules will misfire; ask when assignment group config was last synced with org changes)
+• "We have an on-call schedule, but it's in PagerDuty / Splunk-On-Call / a spreadsheet, not
+  integrated with ServiceNow." (RED FLAG: assignment cannot auto-route; on-call person has to
+  manually pick up or be notified separately)
+• "The CMDB lists team owners, but we don't trust that data." (DEPENDENCY GAP: RED: cannot
+  automate assignment until ownership data is validated)
+• "We escalate based on severity, but there's no documented escalation path." (AMBER FLAG:
+  escalation is ad-hoc; ask for recent example of escalation to understand real logic)
+• "Our escalation escalates to senior staff, but they're often in meetings or unreachable."
+  (RED FLAG: escalation path is broken; on-call coverage gap)
+• "We have one person who knows everything about our middleware; all incidents get assigned to
+  them." (RED FLAG: single point of failure, SLA at risk, burnout risk; knowledge must be
+  documented or distributed)
+
+FIELD-BY-FIELD GUIDANCE
+
+When documenting assignment group structure:
+Ask: "How is your operations team organized? What are the primary support tiers or technology
+domains?" Then ask: "How does that organization map to ServiceNow assignment groups?"
+If there's misalignment, flag as AMBER and note the gap. If assignment groups are not used
+and all incidents are assigned to individuals, flag as RED: routing will not scale, and turnover
+will break processes.
+
+When documenting CI ownership data:
+Ask: "Does the CMDB have an owner field populated for critical CIs? When was it last validated?"
+Request a sample of 10 critical CIs and their owners. Spot-check: ask an ops manager "is this
+person/team still responsible for this system?" If more than 20% are inaccurate, flag as
+[DEPENDENCY GAP] RED. If less than 50% of critical CIs have an owner listed, flag as RED.
+
+When documenting on-call integration:
+Ask: "How does the on-call person know they have an incident? Do they get notified from
+ServiceNow, or do they have to check a separate tool?" If they have to check a separate tool,
+flag as RED: notification is delayed and error-prone. Ask: "If someone is on-call and gets
+reassigned in PagerDuty, does ServiceNow know about it?" If not, flag as AMBER and recommend
+integration as a quick win.
+
+When documenting assignment routing logic:
+Ask: "Walk me through how an incident gets assigned. Is there a rule? A team that does triage
+assignment? Or does it bounce around?" If the answer involves multiple manual handoffs, flag
+as RED. If there is a rule, ask to see it (do not assume it's documented). If it's not
+documented, flag as RED. If it's documented, ask: "How often does this rule successfully route
+an incident to the right team on the first try? What percentage of incidents need manual
+reassignment?"
+
+When documenting escalation paths:
+Ask: "If a Sev 1 incident isn't resolved within 30 minutes, what happens? Who do you escalate
+to? How do they get notified?" Request the documented escalation path (if it exists). If it
+doesn't exist, ask for the last example of escalation. Note the reality vs. policy. If escalation
+time (from incident creation to senior person engaged) is >60 minutes for Sev 1, flag as RED.
+
+When documenting skill gaps or single points of failure:
+Ask: "Are there any systems or technologies where only one person knows how to handle issues?
+Are there any teams that are consistently overloaded?" If yes to either, flag as RED and
+document the specific role/technology. Ask: "What's your cross-training plan?" If there isn't
+one, flag as AMBER and recommend knowledge documentation (runbooks, wikis, ServiceNow KB).
+
+When documenting geographic or timezone distribution:
+Ask: "Does your ops team work in multiple time zones? How do you handle escalation across
+time zones?" If answer is "we wake up the Asia-Pacific team at 3 AM," flag as RED for escalation
+fairness and recommend on-call rotation design review.
+
+PROBING QUESTIONS TO TRIGGER DEPTH
+
+• "Walk me through the last Critical incident. Who got assigned? How long until they saw it?
+  Did it get reassigned? Why?"
+• "What happens if the person assigned to an incident is not available? Who picks it up?"
+• "Have you had a situation where an incident bounced between teams because no one wanted to
+  own it? What was that?"
+• "Who has the authority to declare a Major Incident and stand up a war room? How do they get
+  notified?"
+• "If a vendor (e.g., a SaaS provider) has responsibility for part of the infrastructure, how
+  is that handled in your assignment process?"
+
+EXPECTED OUTPUTS FOR DOWNSTREAM WORKFLOWS
+
+This workflow must document:
+• Organization chart mapped to ServiceNow assignment groups
+• CMDB CI ownership coverage and accuracy assessment
+• On-call schedule system and integration status
+• Assignment routing rules (automated and manual)
+• Escalation policy and execution effectiveness
+• Known single points of knowledge failure
+• Geographic/timezone distribution and escalation implications
+• Average time from incident creation to assignment completion
+• Frequency of mis-assignments and re-routing
+
+Critical assignment gaps cause:
+• Incident delay as incidents wait for manual assignment or discovery
+• Escalation delays as critical issues are assigned to junior staff who should have escalated
+  immediately
+• Burnout and turnover in overloaded teams
+• SLA breaches due to missed or late assignment
+• Lost context through multiple handoffs without proper documentation
+
+Strong assignment routing is the backbone of predictable, timely incident response. Invest
+heavily in CMDB ownership validation and on-call integration here.

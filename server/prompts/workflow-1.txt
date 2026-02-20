@@ -1,0 +1,86 @@
+WORKFLOW 1: SIGNAL INTAKE & EVENT DETECTION
+Focus: How monitoring/observability tools generate alerts, how those alerts reach the operations
+team, what filtering or deduplication happens before human review.
+
+PURPOSE & SCOPE
+This workflow captures the journey of a signal from a monitoring tool (Prometheus, Datadog,
+Splunk, New Relic, Grafana Loki, etc.) into the hands of an operator who can act on it.
+A critical gap many organizations face: alerts fire in isolation, may be duplicated or noisy,
+and lack context about what they describe. Your task is to understand the raw mechanics
+of how the client's observability tools communicate with their operational hub.
+
+KEY ITOM DEPENDENCIES
+• Observability Tool Connectors: Are alerts actively flowing into ServiceNow? Via MID Server
+  REST ingestion? Webhook? Email-to-incident? If not, the entire ITOM automation pipeline
+  is broken at the source.
+• Event Processing Rules: Does ServiceNow have inbound event mapping rules that normalize
+  and enrich raw alerts before they become incidents?
+• Alert Thresholds & Tuning: Who sets thresholds? How often are they tuned? Poorly tuned
+  thresholds cause alert fatigue and missed critical signals.
+• Deduplication Strategy: Do alerts for the same issue arrive multiple times per minute?
+  Is deduplication happening in the observability tool or in ServiceNow?
+
+COMMON GAPS TO PROBE
+• "We don't have a connector to ServiceNow — alerts go to email or Slack." (RED FLAG:
+  no automated intake, manual incident creation, lost context)
+• "Our observability tool is siloed; ops team has to manually forward critical alerts to
+  the ticketing system." (RED FLAG: single point of failure, slowness, data loss)
+• "We get thousands of alerts per day; most are noise." (AMBER FLAG: thresholds need tuning
+  or architectural rethink; ask how many become actual incidents)
+• "We don't know what tool is the source of truth for monitoring." (RED FLAG: multiple
+  toolchains, no unified intake strategy)
+• "Alerts don't include which CI they relate to." (DEPENDENCY GAP: observability tool
+  tagging/labels not aligned with CMDB; will break correlation and context enrichment)
+
+FIELD-BY-FIELD GUIDANCE
+
+When documenting observability tool names & connectivity:
+Ask not just "What tools do you monitor with?" but "How does each tool notify your ops team?"
+Are they all connected to ServiceNow? If any is email-only, flag as RED and note the tool name.
+Verify the connector type (MID Server, REST, webhook, API poller) for each tool.
+
+When documenting alert volume & frequency:
+Request actual numbers, not estimates. "We get a lot of alerts" is useless. Ask: "In a typical
+day, how many unique alert types fire? How many total events (including duplicates)? What's
+your biggest noise generator?" High volume (>100/hour) combined with manual triage is a RED.
+
+When documenting current filtering/deduplication:
+Probe for dedupe logic: Does the observability tool group identical alerts? Does ServiceNow?
+Both? If neither, flag as AMBER. Ask: "If the same server CPU goes to 95%, how many alert
+messages does your team receive in 5 minutes?" If answer is "several" or "we don't know,"
+flag as RED and recommend alert grouping rules review.
+
+When documenting alert content & context:
+Ask what information is included: source tool, affected CI identifier, threshold value,
+timestamp, severity. If severity is missing or inconsistent, flag as AMBER. If CI identifier
+is missing or doesn't match CMDB CI names, flag as [DEPENDENCY GAP] RED: observability tool
+tagging/labeling strategy must align with CMDB before correlation can work.
+
+When documenting on-call visibility:
+Ask: "Does the observability tool know who is on call?" If not, ask how ops team knows which
+alert to action. If answer is "we check a spreadsheet" or "we have to know from experience,"
+flag as AMBER and note that escalation will not auto-route without on-call integration.
+
+PROBING QUESTIONS TO TRIGGER DEPTH
+
+• "Walk me through an example: a storage array fills to 90%. What happens next? Who gets
+  notified, via what tool, and how long until someone sees it?"
+• "Have you ever had an alert fire 50+ times for a single issue? What did you do?"
+• "Do your monitoring tools know the CMDB CI names? How do we prove that?"
+• "If one of your observability tools goes down for 2 hours, can you still detect critical
+  issues?" (tests redundancy and SLA awareness)
+• "When was the last time you reviewed your alert thresholds? Who owns that process?"
+
+EXPECTED OUTPUTS FOR DOWNSTREAM WORKFLOWS
+
+This workflow must document:
+• Inventory of all observability tools in use
+• Connectivity status (ServiceNow-connected or not) for each
+• Current alert volume, duplication rate, and noise level
+• Whether CI tagging in alerts aligns with CMDB
+• Current filtering/dedupe rules and where they execute
+• On-call escalation readiness and alert routing logic
+• Any historical incidents where alerts were missed or delayed
+
+RED flags here will block effective triage, correlation, and assignment in downstream workflows.
+Address them early in the assessment.

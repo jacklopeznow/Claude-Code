@@ -1,0 +1,319 @@
+/**
+ * Layout-specific styles
+ * Sidebar, topbar, and main content area
+ */
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ============================================================================
+   TOPBAR STYLES
+   ============================================================================ */
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background-color: white;
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: var(--z-sticky);
+  box-shadow: var(--shadow-sm);
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+  flex: 1;
+  min-width: 0;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  flex-shrink: 0;
+}
+
+.topbar-logo {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--color-primary-navy);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+  white-space: nowrap;
+  transition: opacity var(--transition-fast);
+}
+
+.topbar-logo:hover {
+  opacity: 0.8;
+  text-decoration: none;
+}
+
+.topbar-project-name {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  margin-left: var(--spacing-lg);
+  padding-left: var(--spacing-lg);
+  border-left: 2px solid var(--color-border);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: var(--font-size-xl);
+  cursor: pointer;
+  color: var(--color-text-primary);
+  padding: var(--spacing-sm);
+  margin: -var(--spacing-sm);
+  transition: color var(--transition-fast);
+  border-radius: var(--radius-base);
+}
+
+.topbar-hamburger:hover {
+  color: var(--color-accent-teal);
+  background-color: var(--color-bg-light);
+}
+
+/* ============================================================================
+   SIDEBAR STYLES
+   ============================================================================ */
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 70px;
+  width: 260px;
+  height: calc(100vh - 70px);
+  background-color: white;
+  border-right: 1px solid var(--color-border);
+  padding: var(--spacing-xl) 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: var(--z-sticky) - 1;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-border-dark);
+}
+
+.sidebar-section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.sidebar-section-title {
+  padding: var(--spacing-base) var(--spacing-xl);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  letter-spacing: 0.5px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.sidebar-item {
+  padding: var(--spacing-base) var(--spacing-xl);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-base);
+  transition: all var(--transition-fast);
+  font-size: var(--font-size-sm);
+  border-left: 3px solid transparent;
+}
+
+.sidebar-item:hover {
+  background-color: var(--color-bg-light);
+  color: var(--color-accent-teal);
+  border-left-color: var(--color-accent-teal);
+}
+
+.sidebar-item.active {
+  background-color: var(--color-bg-light);
+  color: var(--color-accent-teal);
+  border-left-color: var(--color-accent-teal);
+  font-weight: var(--font-weight-semibold);
+}
+
+.sidebar-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: var(--font-size-base);
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: var(--z-sticky) - 2;
+}
+
+/* ============================================================================
+   MAIN CONTENT AREA
+   ============================================================================ */
+
+.main-content {
+  margin-left: 260px;
+  margin-top: 70px;
+  padding: var(--spacing-2xl);
+  min-height: calc(100vh - 70px);
+  background-color: var(--color-bg-light);
+  flex: 1;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN - TABLET
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 220px;
+  }
+
+  .main-content {
+    margin-left: 220px;
+    padding: var(--spacing-xl);
+  }
+
+  .topbar {
+    padding: 0 var(--spacing-lg);
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN - MOBILE (768px and below)
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .topbar-hamburger {
+    display: flex;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    max-height: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    overflow: hidden;
+    padding: 0;
+    transition: max-height var(--transition-base);
+    z-index: var(--z-sticky) - 1;
+  }
+
+  .sidebar.open {
+    max-height: 100vh;
+    padding: var(--spacing-lg) 0;
+    overflow-y: auto;
+  }
+
+  .sidebar-overlay {
+    display: block;
+  }
+
+  .sidebar.open ~ .sidebar-overlay {
+    display: block;
+  }
+
+  .main-content {
+    margin-left: 0;
+    margin-top: 70px;
+    padding: var(--spacing-lg);
+  }
+
+  .topbar {
+    padding: 0 var(--spacing-lg);
+  }
+
+  .topbar-logo {
+    font-size: var(--font-size-base);
+  }
+
+  .topbar-project-name {
+    display: none;
+  }
+
+  .sidebar-item {
+    padding: var(--spacing-sm) var(--spacing-lg);
+  }
+
+  .sidebar-section-title {
+    padding: var(--spacing-sm) var(--spacing-lg);
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN - SMALL MOBILE (480px and below)
+   ============================================================================ */
+
+@media (max-width: 480px) {
+  .topbar {
+    height: 60px;
+    padding: 0 var(--spacing-base);
+  }
+
+  .main-content {
+    margin-top: 60px;
+    padding: var(--spacing-base);
+  }
+
+  .topbar-logo {
+    font-size: var(--font-size-sm);
+  }
+
+  .topbar-left {
+    gap: var(--spacing-base);
+  }
+
+  .topbar-right {
+    gap: var(--spacing-sm);
+  }
+
+  .topbar-right button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-sm);
+  }
+}

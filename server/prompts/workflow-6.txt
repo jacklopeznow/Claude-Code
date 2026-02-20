@@ -1,0 +1,131 @@
+WORKFLOW 6: ESCALATION & MAJOR INCIDENT MANAGEMENT
+Focus: How incidents escalate, major incident processes, command structure, and communication
+protocols. This workflow separates controlled chaos from panic.
+
+PURPOSE & SCOPE
+Most incidents are routine: assigned, diagnosed, resolved, closed. But some incidents are not
+routine. A critical service goes down. Multiple dependent services are affected. Responders are
+unsure if it's a platform issue or an application issue. The system needs to shift from
+individual incident response to coordinated incident management. Your task is to understand the
+client's escalation criteria, major incident process, incident command structure, communication
+protocols, and readiness for large-scale coordination.
+
+KEY ITOM DEPENDENCIES
+• Escalation Policies: Are escalation triggers defined by severity, duration, impact, or a
+  combination? Are escalation paths documented?
+• Incident Commander Role: Is there a designated incident commander for major incidents? Is
+  that role trained? Or does the organization default to whoever has the loudest voice?
+• Communication Protocols: Is there a bridge call/Slack channel/war room for major incidents?
+  Who gets notified? In what order?
+• Service Dependency Mapping: Understanding which downstream services are affected by a given
+  issue is critical for scope assessment and customer communication.
+• Status Page Integration: Can status updates be pushed to a customer-facing status page?
+• Executive Escalation: Are executives notified appropriately? Is there an executive escalation
+  policy separate from technical escalation?
+
+COMMON GAPS TO PROBE
+• "We don't have a major incident process; if something is bad, we just swarm on it." (RED FLAG:
+  no command structure, communication is likely to be chaotic, decisions may be reactive)
+• "Escalation is manual; someone has to call the VP or the senior team." (AMBER FLAG: delays and
+  single points of failure; escalation should be rules-driven)
+• "We have a major incident process, but it's not followed consistently." (AMBER FLAG: ask why —
+  is the process unclear? Not documented? Perceived as bureaucracy? Address the root cause.)
+• "There's no incident commander; whoever can fix the problem fastest is in charge." (RED FLAG:
+  technical expert ≠ incident commander; recommendation: separate technical lead from commander)
+• "Executives find out about major incidents through customer calls or tweets, not from us."
+  (RED FLAG: communication failure; recommend executive escalation trigger)
+• "We don't have a status page; customer communication happens ad hoc." (AMBER FLAG: recommend
+  status page integration as quick win for customer confidence)
+• "Major incident calls happen, but notes are scattered across Slack/email/tickets; there's no
+  single source of truth." (AMBER FLAG: post-incident analysis suffers; recommend incident
+  command tools like Slack channel integration or dedicated war room tool)
+
+FIELD-BY-FIELD GUIDANCE
+
+When documenting escalation triggers:
+Ask: "When does an incident become a 'Major Incident'? What are the criteria?" If the answer
+is vague ("when it feels big" or "when the VP calls"), flag as RED. If criteria exist (e.g.,
+"any Sev 1 lasting >30 min" or "any incident affecting >20% of users"), ask: "How consistent
+is that decision? Who makes the call?" If multiple people can declare a major incident and they
+don't always agree, flag as AMBER.
+
+When documenting incident command structure:
+Ask: "During a major incident, who is in charge? What is their role? What decisions do they
+make?" If the answer is "the technical expert who's fixing the problem," flag as RED and explain
+the difference between incident commander (manages process, communication, scope) and technical
+lead (investigates/fixes). If there's no designated incident commander, flag as RED. If there is,
+ask: "Is that person trained? How frequently do they exercise this role?" <annual training or
+<1 major incident in past year = AMBER.
+
+When documenting escalation notification:
+Ask: "How does management get notified of a major incident? How long does it take?" If the
+answer is "someone has to call them" or "they check email," flag as RED. Request the escalation
+chain (team lead -> manager -> director -> VP). If the chain is >5 levels deep, ask: "How long
+does it take to get from incident to VP awareness?" >30 minutes for Sev 1 = RED.
+
+When documenting incident communication protocol:
+Ask: "When there's a major incident, where do responders and stakeholders coordinate? Slack?
+Bridge call? War room?" If multiple channels are used simultaneously, flag as AMBER: message
+fragmentation risk. If a dedicated channel/call is used, ask: "Who facilitates? Who takes notes?
+Where are notes stored after the incident?" If notes are scattered or lost, flag as AMBER and
+recommend war room tool integration.
+
+When documenting customer communication:
+Ask: "Who communicates incident status to customers? How often? What channel?" If communication
+is manual, flag as AMBER and ask: "How consistent is the messaging?" If external status page
+exists, ask: "Who updates it? How quickly? Is it automated from ServiceNow?" Automated = GREEN,
+manual = AMBER.
+
+When documenting service dependency visibility during incidents:
+Ask: "During a critical incident, can you quickly see which customer-facing services are
+affected? Where does that information come from?" If the answer is "we have to figure it out
+from the alert" or "someone looks at the topology document," flag as AMBER. If the dependency
+map is in ServiceNow and responders can query it, mark as GREEN.
+
+When documenting post-incident procedures:
+Ask: "After a major incident, do you hold a retrospective? How long after the incident? Who
+attends? Is the outcome documented?" If retrospectives are not held or are rare, flag as RED.
+If they are held but findings are not tracked, flag as AMBER and recommend using ServiceNow
+for action item tracking.
+
+When documenting incident metrics and SLAs:
+Ask: "Do you track metrics for major incidents (detection time, escalation time, resolution
+time, impact)? Are there SLAs?" If not, flag as AMBER and recommend establishing baseline
+metrics. If metrics exist, ask to see the last 3-6 months of data.
+
+PROBING QUESTIONS TO TRIGGER DEPTH
+
+• "Walk me through the last major incident. Who declared it? How long before it was escalated
+  to management? How was communication handled? Was there a retrospective?"
+• "Have you had a major incident where responders didn't know what was going on and the customer
+  found out before you did? What happened?"
+• "If a major incident happened right now, could you stand up a war room and have key people on
+  a call within 5 minutes? Who would you need to call? In what order?"
+• "How is on-call structured for escalation? Is there a separate on-call person for incident
+  commander role, or is it combined with technical on-call?"
+• "Have you had a situation where decisions made during an incident conflicted? How was that
+  resolved?"
+
+EXPECTED OUTPUTS FOR DOWNSTREAM WORKFLOWS
+
+This workflow must document:
+• Escalation triggers and major incident criteria
+• Incident commander role definition and training status
+• Escalation notification chains and timing
+• Incident communication protocol and coordination tools
+• Customer communication process and status page integration
+• Service dependency visibility and data sources
+• Retrospective/PIR cadence and follow-up tracking
+• Incident metrics baseline and SLAs
+• Historical major incidents (list, duration, impact, root cause)
+
+Critical escalation gaps cause:
+• Delayed executive awareness and customer communication
+• Chaotic coordination with conflicting decisions or duplicated effort
+• Lost incident context due to scattered notes
+• Repeated failures from retrospective findings not being implemented
+• Customer loss of confidence due to lack of communication or inconsistent messaging
+
+Major incident process maturity is a direct reflection of operational maturity. Invest here
+in formalizing command structure, communication protocols, and retrospective discipline. Quick
+wins: incident commander training, status page integration, war room tool adoption.
